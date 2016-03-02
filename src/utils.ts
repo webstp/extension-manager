@@ -3,8 +3,8 @@ import {parse as parseUrl} from 'url';
 import {isBoolean, get, find} from 'lodash';
 import * as http from 'http';
 import * as https from 'https';
-import HttpsProxyAgent = require('https-proxy-agent');
-import HttpProxyAgent = require('http-proxy-agent');
+import HttpsProxyAgent = require('https-proxy-agent/index');
+import HttpProxyAgent = require('http-proxy-agent/index');
 import * as fs from 'fs';
 import {open, ZipFile, Entry} from 'yauzl';
 import {Readable} from 'stream';
@@ -83,7 +83,7 @@ export function getProxyAgent(protocol: string) {
     const proxyUrl = parseUrl(rawProxyUrl);
     const options = {
         host: proxyUrl.hostname,
-        port: Number(proxyUrl.port),
+        port: proxyUrl.port,
         auth: proxyUrl.auth,
         rejectUnauthorized: isBoolean(strictSSL) ? strictSSL : true
     }

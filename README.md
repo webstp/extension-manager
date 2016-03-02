@@ -6,10 +6,8 @@ Currently this only manages a list of extension that you wish to install.
 Open up VS Code and then hit `F1` and type ext, select install and then type `Extension Manager`.
 hit enter and reload the window to enable the extensions.
 
-## Usage
-In your settings.json file you can include the following configuration
-`publisher.extension`.
-
+## Settings
+In your settings file you can include a list of extension that you wish to be installed 
 ##### settings.json
 ```
 {
@@ -18,4 +16,9 @@ In your settings.json file you can include the following configuration
     ]
 }
 ```
+
+## Commands
+* `Extension Manager: Install Missing Extensions` - to install missing extensions from your list defined in settings.json
+
+
 
