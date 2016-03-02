@@ -1,8 +1,9 @@
 {
   "name": "extension-manager",
   "displayName": "Extension Manager",
-  "description": "Manager your extensions",
-  "version": "0.0.3",
+  "description": "Manage your extensions",
+  "license": "MIT",
+  "version": "0.0.5",
   "publisher": "webstp",
   "repository": {
     "type": "github",
@@ -15,18 +16,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.installMissing"
+    "onCommand:webstp.extension-manager.installMissing"
   ],
   "main": "./out/src/extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.installMissing",
-        "title": "Extension Manager: Install Missing Extensions"
+        "command": "webstp.extension-manager.installMissing",
+        "title": "Extension Manager: Install Missing Extensions",
+        "description": "Install missing extensions from settings"
       }
     ],
     "configuration": {
-      "type": "object",
       "title": "Extension Manager Configuration",
       "properties": {
         "extension-manager.extensions": {
@@ -45,11 +46,14 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+  },
+  "dependencies": {
     "http-proxy-agent": "^1.0.0",
     "https-proxy-agent": "^1.0.0",
     "lodash": "^4.5.1",
     "semver": "^5.1.0",
     "typescript": "^1.7.5",
-    "vscode": "^0.11.0"
+    "vscode": "^0.11.0",
+    "rimraf": "^2.5.2"
   }
 }
