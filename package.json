@@ -2,7 +2,7 @@
   "name": "extension-manager",
   "displayName": "Extension Manager",
   "description": "Manager your extensions",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "webstp",
   "repository": {
     "type": "github",
@@ -15,7 +15,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.installMissing"
+    "*"
   ],
   "main": "./out/src/extension",
   "contributes": {
