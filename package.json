@@ -3,7 +3,11 @@
 	"displayName": "Extension Manager",
 	"description": "Manager your extensions",
 	"version": "0.0.1",
-	"publisher": "aonlaan",
+	"publisher": "webstp",
+    "repository": {
+        "type": "github",
+        "url": "https://github.com/webstp/extension-manager"
+    },
 	"engines": {
 		"vscode": "^0.10.6"
 	},
