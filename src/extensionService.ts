@@ -9,7 +9,7 @@ import * as os from 'os';
 import * as path from 'path';
 
 export default class ExtensionService {
-    private extensionsPath: string = path.join(os.homedir(), '.vscode', 'extensions');
+    constructor(private context: vscode.ExtensionContext) {}
 
     listWantedExtensions(): Promise<string[]> {
         return Promise.resolve(vscode.workspace.getConfiguration('extension-manager').get<string[]>('extensions') || []);
@@ -28,7 +28,7 @@ export default class ExtensionService {
     installExtension(extension: IExtension) {
         return this.getLastValidVersion(extension, extension.versions).then(v => {
             const tempPath = path.join(os.tmpdir(), extension.metadata.id);
-            const targetPath = path.join(this.extensionsPath, `${extension.publisher}.${extension.name}.${v.version}`);
+            const targetPath = path.join(this.context.extensionPath, `${extension.publisher}.${extension.name}.${v.version}`);
             const packageJsonPath = path.join(targetPath, 'package.json');
 
             return utils.download(tempPath, v.downloadUri)

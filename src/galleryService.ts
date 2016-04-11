@@ -72,7 +72,7 @@ function queryGallery(extensions?: string[]): Promise<GalleryExtension[]> {
     let data = {
         filters: [{
             criteria: [{
-                filterType: 8, //Installation Target
+                filterType: 8, // Installation Target
                 value: 'Microsoft.VisualStudio.Code'
             }]
         }],
