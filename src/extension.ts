@@ -8,7 +8,7 @@ import {listExtensions} from './galleryService';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    const extensionService = new ExtensionService();
+    const extensionService = new ExtensionService(context);
 
     let installMissingExtensions = vscode.commands.registerCommand('webstp.extension-manager.installMissing', () => {
         extensionService.listMissingExtensions().then(extensions => {
