@@ -1,15 +1,14 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es5",
-		"outDir": "out",
-		"noLib": true,
-		"sourceMap": true,
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "outDir": "out",
+        "noLib": true,
+        "sourceMap": true,
         "rootDir": "."
-	},
-	"exclude": [
-		"node_modules",
-        "typings/browser.d.ts",
-        "typings/browser"
-	]
+    },
+    "exclude": [
+        "node_modules",
+        ".vscode-test"
+    ]
 }

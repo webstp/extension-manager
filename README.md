@@ -1,24 +1,27 @@
 # Extension Manager
-The Purpose of this extension is to help manage your extensions.
-Currently this only manages a list of extension that you wish to install.
+This extension adds the ability to define a list of required extensions and install any extensions that are missing.
 
 ## Install
 Open up VS Code and then hit `F1` and type ext, select install and then type `Extension Manager`.
 hit enter and reload the window to enable the extensions.
 
-## Settings
-In your settings file you can include a list of extension that you wish to be installed 
-##### settings.json
+## Contributions
+
+### Configurations
 ```
 {
     "extension-manager.extensions": [
-        "publisher.extension" //replace this with desired extension
-    ]
+        "(publisherName).(extensionName)
+    ],
+    "extension-manager.autoInstall: true
 }
 ```
 
-## Commands
-* `Extension Manager: Install Missing Extensions` - to install missing extensions from your list defined in settings.json
+### Commands
+* `Extension Manager: Install Missing Extensions` - to install missing extensions defined in your configuration
+
+##Change Log: 
+You can view the change log [here](https://gitbub.com/webstp/extension-manager/blob/master/CHANGELOG.md)
 
 
 

@@ -1,7 +1,7 @@
 {
   "name": "extension-manager",
   "displayName": "Extension Manager",
-  "description": "Manage your extensions",
+  "description": "An extension to help manage other extensions",
   "license": "MIT",
   "version": "0.0.5",
   "publisher": "webstp",
@@ -13,20 +13,20 @@
     "url": "https://github.com/webstp/extension-manager/issues"  
   },
   "engines": {
-    "vscode": "^0.10.6"
+    "vscode": "^1.1.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onCommand:webstp.extension-manager.installMissing"
+     "*"
   ],
   "main": "./out/src/extension",
   "contributes": {
     "commands": [
       {
-        "command": "webstp.extension-manager.installMissing",
-        "title": "Extension Manager: Install Missing Extensions",
+        "command": "webstp.extension-manager.installRequired",
+        "title": "Extensions: Install Required Extensions",
         "description": "Install missing extensions from settings"
       }
     ],
@@ -35,10 +35,13 @@
       "properties": {
         "extension-manager.extensions": {
           "type": "array",
-          "default": [
-            "alefragnani.Bookmarks"
-          ],
-          "description": "List of extension you wish to install in the form of (publisher).(extensionName)"
+          "default": [],
+          "description": "List of extension you wish to install in the form of (publisher).(extensionName)."
+        },
+        "extension-manager.autoInstall": {
+          "type": "boolean",
+          "default": true,
+          "description": "Set to 'true' if you want extensions to install automatically on startup, 'false' otherwise."
         }
       }
     }
@@ -49,14 +52,19 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.30",
+    "@types/rimraf": "^0.0.27",
+    "@types/semver": "^5.3.28",
+    "tslint": "^3.14.0",
+    "typescript": "^2.0.0"
   },
   "dependencies": {
     "http-proxy-agent": "^1.0.0",
     "https-proxy-agent": "^1.0.0",
-    "lodash": "^4.5.1",
-    "semver": "^5.1.0",
-    "typescript": "^1.7.5",
+    "lodash": "^4.15.0",
+    "rimraf": "^2.5.4",
+    "semver": "^5.3.0",
     "vscode": "^0.11.0",
-    "rimraf": "^2.5.2"
+    "yauzl": "^2.6.0"
   }
 }
