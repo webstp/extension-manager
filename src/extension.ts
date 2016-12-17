@@ -65,11 +65,12 @@ export function activate(ctx: ExtensionContext) {
     });
 
     let exportCommand = commands.registerCommand('webstp.extension-manager.exportInstalled', () => {
-        var installedIds = [];
-        extensions.all.forEach(e => {
-            installedIds.push(e.id)
-        });
         const config = workspace.getConfiguration('extension-manager');
+        var installedIds = config.get('extensions') as string[];
+        extensions.all.forEach(e => {
+            if (installedIds.filter(x => x == e.id).length == 0)
+                installedIds.push(e.id)
+        });
         config.update('extensions', installedIds, true);
     })
 
