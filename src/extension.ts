@@ -1,5 +1,5 @@
 'use strict';
-import { ExtensionContext, window, StatusBarAlignment, MessageItem, commands, workspace } from 'vscode';
+import { ExtensionContext, window, StatusBarAlignment, MessageItem, commands, workspace, extensions } from 'vscode';
 import { ExtensionManager } from './services/extensionManager';
 import * as semver from 'semver';
 
@@ -63,7 +63,16 @@ export function activate(ctx: ExtensionContext) {
             installMissingExtenstions(missing);
         }
     });
-    
+
+    let exportCommand = commands.registerCommand('webstp.extension-manager.exportInstalled', () => {
+        var installedIds = [];
+        extensions.all.forEach(e => {
+            installedIds.push(e.id)
+        });
+        const config = workspace.getConfiguration('extension-manager');
+        config.update('extensions', installedIds, true);
+    })
+
     ctx.subscriptions.push(installCommand);
 }
 

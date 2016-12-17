@@ -33,7 +33,7 @@ export function request(options: IRequestOptions): Promise<IRequestContext> {
 
 	return new Promise<IRequestContext>((resolve, reject) => {
 		const endpoint = parseUrl(options.url);
-		const protocol = endpoint.protocol === 'https:' ? https : http;
+		const protocol = endpoint.protocol;
         const strictSSL = workspace.getConfiguration('http').get('proxyStrictSSL');
 		const opts: https.RequestOptions = {
 			hostname: endpoint.hostname,
@@ -49,24 +49,44 @@ export function request(options: IRequestOptions): Promise<IRequestContext> {
 			opts.auth = options.user + ':' + options.password;
 		}
 
-		req = protocol.request(opts, (res: http.ClientResponse) => {
-			const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
+		if (protocol === "https")
+			req = https.request(opts, (res: http.ClientResponse) => {
+				const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
 
-			if (res.statusCode >= 300 && res.statusCode < 400 && followRedirects > 0 && res.headers['location']) {
-				resolve(request(Object.assign({}, options, {
-					url: res.headers['location'],
-					followRedirects: followRedirects - 1
-				})));
-			} else {
-				let stream: Stream = res;
+				if (res.statusCode >= 300 && res.statusCode < 400 && followRedirects > 0 && res.headers['location']) {
+					resolve(request(Object.assign({}, options, {
+						url: res.headers['location'],
+						followRedirects: followRedirects - 1
+					})));
+				} else {
+					let stream: Stream = res;
 
-				if (res.headers['content-encoding'] === 'gzip') {
-					stream = stream.pipe(createGunzip());
+					if (res.headers['content-encoding'] === 'gzip') {
+						stream = stream.pipe(createGunzip());
+					}
+
+					resolve({ req, res, stream });
 				}
+			});
+		else if(protocol === "http")
+			req = http.request(opts, (res: http.ClientResponse) => {
+				const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
 
-				resolve({ req, res, stream });
-			}
-		});
+				if (res.statusCode >= 300 && res.statusCode < 400 && followRedirects > 0 && res.headers['location']) {
+					resolve(request(Object.assign({}, options, {
+						url: res.headers['location'],
+						followRedirects: followRedirects - 1
+					})));
+				} else {
+					let stream: Stream = res;
+
+					if (res.headers['content-encoding'] === 'gzip') {
+						stream = stream.pipe(createGunzip());
+					}
+
+					resolve({ req, res, stream });
+				}
+			});
 
 		req.on('error', reject);
 
