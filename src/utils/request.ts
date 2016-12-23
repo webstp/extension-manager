@@ -33,7 +33,9 @@ export function request(options: IRequestOptions): Promise<IRequestContext> {
 
 	return new Promise<IRequestContext>((resolve, reject) => {
 		const endpoint = parseUrl(options.url);
-		const protocol = endpoint.protocol;
+		var http = require('http');
+		var https = require('https');
+		const protocol = endpoint.protocol === 'https:' ? https : http;
         const strictSSL = workspace.getConfiguration('http').get('proxyStrictSSL');
 		const opts: https.RequestOptions = {
 			hostname: endpoint.hostname,
@@ -48,45 +50,24 @@ export function request(options: IRequestOptions): Promise<IRequestContext> {
 		if (options.user && options.password) {
 			opts.auth = options.user + ':' + options.password;
 		}
+		req = protocol.request(opts, (res: http.ClientResponse) => {
+			const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
 
-		if (protocol === "https")
-			req = https.request(opts, (res: http.ClientResponse) => {
-				const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
+			if (res.statusCode >= 300 && res.statusCode < 400 && followRedirects > 0 && res.headers['location']) {
+				resolve(request(Object.assign({}, options, {
+					url: res.headers['location'],
+					followRedirects: followRedirects - 1
+				})));
+			} else {
+				let stream: Stream = res;
 
-				if (res.statusCode >= 300 && res.statusCode < 400 && followRedirects > 0 && res.headers['location']) {
-					resolve(request(Object.assign({}, options, {
-						url: res.headers['location'],
-						followRedirects: followRedirects - 1
-					})));
-				} else {
-					let stream: Stream = res;
-
-					if (res.headers['content-encoding'] === 'gzip') {
-						stream = stream.pipe(createGunzip());
-					}
-
-					resolve({ req, res, stream });
+				if (res.headers['content-encoding'] === 'gzip') {
+					stream = stream.pipe(createGunzip());
 				}
-			});
-		else if(protocol === "http")
-			req = http.request(opts, (res: http.ClientResponse) => {
-				const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
 
-				if (res.statusCode >= 300 && res.statusCode < 400 && followRedirects > 0 && res.headers['location']) {
-					resolve(request(Object.assign({}, options, {
-						url: res.headers['location'],
-						followRedirects: followRedirects - 1
-					})));
-				} else {
-					let stream: Stream = res;
-
-					if (res.headers['content-encoding'] === 'gzip') {
-						stream = stream.pipe(createGunzip());
-					}
-
-					resolve({ req, res, stream });
-				}
-			});
+				resolve({ req, res, stream });
+			}
+		});
 
 		req.on('error', reject);
 
