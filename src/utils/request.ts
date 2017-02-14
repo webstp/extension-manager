@@ -33,6 +33,8 @@ export function request(options: IRequestOptions): Promise<IRequestContext> {
 
 	return new Promise<IRequestContext>((resolve, reject) => {
 		const endpoint = parseUrl(options.url);
+		var http = require('http');
+		var https = require('https');
 		const protocol = endpoint.protocol === 'https:' ? https : http;
         const strictSSL = workspace.getConfiguration('http').get('proxyStrictSSL');
 		const opts: https.RequestOptions = {
@@ -48,7 +50,6 @@ export function request(options: IRequestOptions): Promise<IRequestContext> {
 		if (options.user && options.password) {
 			opts.auth = options.user + ':' + options.password;
 		}
-
 		req = protocol.request(opts, (res: http.ClientResponse) => {
 			const followRedirects = isNumber(options.followRedirects) ? options.followRedirects : 3;
 
