@@ -1,3 +1,6 @@
+# DEPRECATED
+All feature of this extension are now supported by VSCode.
+
 # Extension Manager
 The Purpose of this extension is to help manage your extensions.
 Currently this only manages a list of extension that you wish to install.
